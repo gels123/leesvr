@@ -1,3 +1,9 @@
 [submodule "3rd/zlog"]
 	path = 3rd/zlog
 	url = ../../HardySimpson/zlog.git
+[submodule "3rd/hiredis"]
+	path = 3rd/hiredis
+	url = ../../redis/hiredis.git
+[submodule "3rd/libco"]
+	path = 3rd/libco
+	url = ../libco.git
