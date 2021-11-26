@@ -12,6 +12,9 @@ CPPFLAG = -g -O2 -Wall -std=c++11
 c4.exe: c4.o
 	$(CC) -o $@ $^
 
+c7.exe: c7.o
+	$(CC) -o $@ $^
+
 c9.exe: c9.o
 	$(CC) -o $@ $^
 
