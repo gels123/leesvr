@@ -6,7 +6,8 @@
 #include <sys/types.h>
 #include <sys/time.h>
 
-class UDPSession  {
+class SocketSessionUdp
+{
 private:
     int m_sockfd{0};
     ikcpcb *m_kcp{nullptr};
@@ -19,22 +20,23 @@ private:
     std::vector<row_type> shards;
     size_t dataShards{0};
     size_t parityShards{0};
+
 public:
-    UDPSession(const UDPSession &) = delete;
+    SocketSessionUdp(const SocketSessionUdp &) = delete;
 
-    UDPSession &operator=(const UDPSession &) = delete;
+    SocketSessionUdp &operator=(const SocketSessionUdp &) = delete;
 
-    // Dial connects to the remote server and returns UDPSession.
-    static UDPSession *Dial(const char *ip, uint16_t port);
+    // Dial connects to the remote server and returns SocketSessionUdp.
+    static SocketSessionUdp *Dial(const char *ip, uint16_t port);
 
     // DialWithOptions connects to the remote address "raddr" on the network "udp" with packet encryption
-    static UDPSession *DialWithOptions(const char *ip, uint16_t port, size_t dataShards, size_t parityShards);
+    static SocketSessionUdp *DialWithOptions(const char *ip, uint16_t port, size_t dataShards, size_t parityShards);
 
     // Update will try reading/writing udp packet, pass current unix millisecond
     void Update(uint32_t current) noexcept;
 
     // Destroy release all resource related.
-    static void Destroy(UDPSession *sess);
+    static void Destroy(SocketSessionUdp *sess);
 
     // Read reads from kcp with buffer empty sz.
     ssize_t Read(char *buf, size_t sz) noexcept;
@@ -58,12 +60,12 @@ public:
     inline int SetMtu(int mtu) { return ikcp_setmtu(m_kcp, mtu); }
 
 private:
-    UDPSession() = default;
+    SocketSessionUdp() = default;
 
-    ~UDPSession() = default;
+    ~SocketSessionUdp() = default;
 
     // DialIPv6 is the ipv6 version of Dial.
-    static UDPSession *dialIPv6(const char *ip, uint16_t port);
+    static SocketSessionUdp *dialIPv6(const char *ip, uint16_t port);
 
     // out_wrapper
     static int out_wrapper(const char *buf, int len, struct IKCPCB *kcp, void *user);
@@ -71,9 +73,7 @@ private:
     // output udp packet
     ssize_t output(const void *buffer, size_t length);
 
-    static UDPSession *createSession(int sockfd);
-
-
+    static SocketSessionUdp *createSession(int sockfd);
 };
 
 inline uint32_t currentMs() {

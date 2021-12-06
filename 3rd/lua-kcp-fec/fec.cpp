@@ -7,7 +7,7 @@
 #include <iostream>
 #include <stdexcept>
 #include "fec.h"
-#include "sess.h"
+#include "socketsessionudp.h"
 #include "encoding.h"
 
 FEC::FEC(ReedSolomon enc) :enc(enc) {}

@@ -10,7 +10,7 @@ CC = gcc
 LDFLAGS = $(MYLDFLAGS)
 
 BUILD_CFLAGS =      -I$(LUA_INCLUDE_DIR) $(CZSET_CFLAGS)
-OBJS =              ikcp.o galois.o galois_table.o matrix.o galois_noasm.o  inversion_tree.o reedsolomon.o fec.o sess.o
+OBJS =              ikcp.o galois.o galois_table.o matrix.o galois_noasm.o inversion_tree.o reedsolomon.o fec.o socketsessionudp.o
 
 
 all:
@@ -35,6 +35,7 @@ linux_kcp_test:
 
 linux_fec_test: fec_test.o
 	@$(MAKE) $(TARGET) MYLDFLAGS="$(LNX_LDFLAGS)"
+	$(CC) kcp_test.cpp -I./ -L./ -lkcp_fec -Wl,-rpath='./' -o fec_test -std=c++11
 	
 macosx:	
 	@$(MAKE) $(TARGET) MYLDFLAGS="$(MAC_LDFLAGS)"
@@ -43,5 +44,5 @@ $(TARGET): $(OBJS)
 	$(CC) $(LDFLAGS) -o $@ $(OBJS)
 
 clean:
-	rm -f *.o *.so
+	rm -rf *.o *.so kcp_test fec_test
 

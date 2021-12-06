@@ -1,4 +1,4 @@
-#include "sess.h"
+#include "socketsessionudp.h"
 #include "encoding.h"
 #include <iostream>
 #include <sys/socket.h>
@@ -7,8 +7,8 @@
 #include <unistd.h>
 #include <cstring>
 
-UDPSession *
-UDPSession::Dial(const char *ip, uint16_t port) {
+SocketSessionUdp *
+SocketSessionUdp::Dial(const char *ip, uint16_t port) {
     struct sockaddr_in saddr;
     memset(&saddr, 0, sizeof(saddr));
     saddr.sin_family = AF_INET;
@@ -16,8 +16,9 @@ UDPSession::Dial(const char *ip, uint16_t port) {
     int ret = inet_pton(AF_INET, ip, &(saddr.sin_addr));
 
     if (ret == 1) { // do nothing
+
     } else if (ret == 0) { // try ipv6
-        return UDPSession::dialIPv6(ip, port);
+        return SocketSessionUdp::dialIPv6(ip, port);
     } else if (ret == -1) {
         return nullptr;
     }
@@ -31,12 +32,12 @@ UDPSession::Dial(const char *ip, uint16_t port) {
         return nullptr;
     }
 
-    return UDPSession::createSession(sockfd);
+    return SocketSessionUdp::createSession(sockfd);
 }
 
-UDPSession *
-UDPSession::DialWithOptions(const char *ip, uint16_t port, size_t dataShards, size_t parityShards) {
-    auto sess = UDPSession::Dial(ip, port);
+SocketSessionUdp *
+SocketSessionUdp::DialWithOptions(const char *ip, uint16_t port, size_t dataShards, size_t parityShards) {
+    auto sess = SocketSessionUdp::Dial(ip, port);
     if (sess == nullptr) {
         return nullptr;
     }
@@ -47,12 +48,13 @@ UDPSession::DialWithOptions(const char *ip, uint16_t port, size_t dataShards, si
         sess->dataShards = dataShards;
         sess->parityShards = parityShards;
     }
+
     return sess;
 }
 
 
-UDPSession *
-UDPSession::dialIPv6(const char *ip, uint16_t port) {
+SocketSessionUdp *
+SocketSessionUdp::dialIPv6(const char *ip, uint16_t port) {
     struct sockaddr_in6 saddr;
     memset(&saddr, 0, sizeof(saddr));
     saddr.sin6_family = AF_INET6;
@@ -70,11 +72,11 @@ UDPSession::dialIPv6(const char *ip, uint16_t port) {
         return nullptr;
     }
 
-    return UDPSession::createSession(sockfd);
+    return SocketSessionUdp::createSession(sockfd);
 }
 
-UDPSession *
-UDPSession::createSession(int sockfd) {
+SocketSessionUdp *
+SocketSessionUdp::createSession(int sockfd) {
     int flags = fcntl(sockfd, F_GETFL, 0);
     if (flags < 0) {
         return nullptr;
@@ -84,7 +86,7 @@ UDPSession::createSession(int sockfd) {
         return nullptr;
     }
 
-    UDPSession *sess = new(UDPSession);
+    SocketSessionUdp *sess = new(SocketSessionUdp);
     sess->m_sockfd = sockfd;
     sess->m_kcp = ikcp_create(IUINT32(rand()), sess);
     sess->m_kcp->output = sess->out_wrapper;
@@ -93,7 +95,7 @@ UDPSession::createSession(int sockfd) {
 
 
 void
-UDPSession::Update(uint32_t current) noexcept {
+SocketSessionUdp::Update(uint32_t current) noexcept {
     for (;;) {
         ssize_t n = recv(m_sockfd, m_buf, sizeof(m_buf), 0);
         if (n > 0) {
@@ -141,15 +143,19 @@ UDPSession::Update(uint32_t current) noexcept {
 }
 
 void
-UDPSession::Destroy(UDPSession *sess) {
+SocketSessionUdp::Destroy(SocketSessionUdp *sess) {
     if (nullptr == sess) return;
-    if (0 != sess->m_sockfd) { close(sess->m_sockfd); }
-    if (nullptr != sess->m_kcp) { ikcp_release(sess->m_kcp); }
+    if (0 != sess->m_sockfd) {
+        close(sess->m_sockfd);
+    }
+    if (nullptr != sess->m_kcp) {
+        ikcp_release(sess->m_kcp);
+    }
     delete sess;
 }
 
 ssize_t
-UDPSession::Read(char *buf, size_t sz) noexcept {
+SocketSessionUdp::Read(char *buf, size_t sz) noexcept {
     if (m_streambufsiz > 0) {
         size_t n = m_streambufsiz;
         if (n > sz) {
@@ -181,21 +187,22 @@ UDPSession::Read(char *buf, size_t sz) noexcept {
 }
 
 ssize_t
-UDPSession::Write(const char *buf, size_t sz) noexcept {
+SocketSessionUdp::Write(const char *buf, size_t sz) noexcept {
     int n = ikcp_send(m_kcp, const_cast<char *>(buf), int(sz));
     if (n == 0) {
         return sz;
-    } else return n;
+    } else 
+        return n;
 }
 
 int
-UDPSession::SetDSCP(int iptos) noexcept {
+SocketSessionUdp::SetDSCP(int iptos) noexcept {
     iptos = (iptos << 2) & 0xFF;
     return setsockopt(this->m_sockfd, IPPROTO_IP, IP_TOS, &iptos, sizeof(iptos));
 }
 
 void
-UDPSession::SetStreamMode(bool enable) noexcept {
+SocketSessionUdp::SetStreamMode(bool enable) noexcept {
     if (enable) {
         this->m_kcp->stream = 1;
     } else {
@@ -204,9 +211,9 @@ UDPSession::SetStreamMode(bool enable) noexcept {
 }
 
 int
-UDPSession::out_wrapper(const char *buf, int len, struct IKCPCB *, void *user) {
+SocketSessionUdp::out_wrapper(const char *buf, int len, struct IKCPCB *, void *user) {
     assert(user != nullptr);
-    UDPSession *sess = static_cast<UDPSession *>(user);
+    SocketSessionUdp *sess = static_cast<SocketSessionUdp *>(user);
 
     if (sess->fec.isEnabled()) {    // append FEC header
         // extend to len + fecHeaderSizePlus2
@@ -244,7 +251,9 @@ UDPSession::out_wrapper(const char *buf, int len, struct IKCPCB *, void *user) {
 }
 
 ssize_t
-UDPSession::output(const void *buffer, size_t length) {
+SocketSessionUdp::output(const void *buffer, size_t length) {
+    char *str = (char *)(buffer);
+    printf("SocketSessionUdp::output str = %s\n", str);
     ssize_t n = send(m_sockfd, buffer, length, 0);
     return n;
 }
