@@ -1,8 +1,6 @@
 /**
  * @file testzlog.cpp
  * @author gels
- * @brief 
- * @version 0.1
  * @date 2021-11-27
  * 
  * @copyright Copyright (c) 2021
@@ -14,5 +12,7 @@
 
 int main(int argc, char** argv)
 {
+	int a = 100;
+	std::cout << "-------" << std::endl;
 	return 0;
 } 
