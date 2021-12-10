@@ -59,7 +59,7 @@ test(struct socket_server *ss) {
 }
 
 int
-main() {
+main2() {
 	//linux下给disconnected socket发送消息，底层会抛出SIGPIPE信号，这个信号的缺省处理是进程退出，忽略之
 	struct sigaction sa;
 	sa.sa_handler = SIG_IGN;

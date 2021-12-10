@@ -1,12 +1,12 @@
-#ifndef skynet_socket_server_h
-#define skynet_socket_server_h
+#ifndef socket_server_h
+#define socket_server_h
 
 #include <stdint.h>
 
 // custom malloc/free
-//#define SOCKET_SERVER_FILE_MEMAPI   skynet.h
-//#define SOCKET_SERVER_MALLOC        skynet_malloc
-//#define SOCKET_SERVER_FREE          skynet_free
+//#define SOCKET_SERVER_FILE_MEMAPI
+//#define SOCKET_SERVER_MALLOC
+//#define SOCKET_SERVER_FREE
 
 #define SOCKET_DATA 0
 #define SOCKET_CLOSE 1

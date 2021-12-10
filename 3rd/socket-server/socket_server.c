@@ -1057,7 +1057,7 @@ forward_message_udp(struct socket_server *ss, struct socket *s, struct socket_me
 	union sockaddr_all sa;
 	socklen_t slen = sizeof(sa);
 	int n = recvfrom(s->fd, ss->udpbuffer,MAX_UDP_PACKAGE,0,&sa.s,&slen);
-	if (n<0) {
+	if (n < 0) {
 		switch(errno) {
 		case EINTR:
 		case EAGAIN:
@@ -1372,7 +1372,7 @@ do_bind(const char *host, int port, int protocol, int *family) {
 		host = "0.0.0.0";	// INADDR_ANY
 	}
 	sprintf(portstr, "%d", port);
-	memset( &ai_hints, 0, sizeof( ai_hints ) );
+	memset(&ai_hints, 0, sizeof(ai_hints));
 	ai_hints.ai_family = AF_UNSPEC;
 	if (protocol == IPPROTO_TCP) {
 		ai_hints.ai_socktype = SOCK_STREAM;
@@ -1382,8 +1382,8 @@ do_bind(const char *host, int port, int protocol, int *family) {
 	}
 	ai_hints.ai_protocol = protocol;
 
-	status = getaddrinfo( host, portstr, &ai_hints, &ai_list );
-	if ( status != 0 ) {
+	status = getaddrinfo(host, portstr, &ai_hints, &ai_list);
+	if (status != 0) {
 		return -1;
 	}
 	*family = ai_list->ai_family;
@@ -1398,7 +1398,7 @@ do_bind(const char *host, int port, int protocol, int *family) {
 	if (status != 0)
 		goto _failed;
 
-	freeaddrinfo( ai_list );
+	freeaddrinfo(ai_list);
 	return fd;
 _failed:
 	close(fd);

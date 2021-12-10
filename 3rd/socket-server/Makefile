@@ -1,5 +1,5 @@
-socket-server : socket_server.c test.c
+udpsvr: socket_server.c testudp.c
 	gcc -g -Wall -o $@ $^ -lpthread
 
 clean:
-	rm socket-server
+	rm udpsvr
