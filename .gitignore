@@ -38,3 +38,5 @@
 build/CMakeFiles/
 
 build/
+
+lib/my-socket-server/.vscode/
