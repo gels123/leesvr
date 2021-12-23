@@ -10,24 +10,24 @@ all:
 	@echo "  * clean"
 
 linux:
-	@echo "\n\n========== make hiredis start =========="
-	cd ./lib/hiredis;make
-	mv ./lib/hiredis/*.so ./lib/
-	@echo "========== make hiredis end =========="
+	# @echo "\n\n========== make hiredis start =========="
+	# cd ./lib/hiredis;make
+	# mv ./lib/hiredis/*.so ./lib/
+	# @echo "========== make hiredis end =========="
 
 	@echo "\n\n========== make libco start =========="
-	cd ./lib/libco;make
+	cd ./lib/libco;make libcolib.so
 	mv ./lib/libco/solib/*.so ./lib/
 	@echo "========== make libco end =========="
 
-	@echo "\n\n========== make zlog start =========="
-	cd ./lib/zlog;make
-	mv ./lib/zlog/src/*.so* ./lib/
-	@echo "========== make zlog end =========="
+	# @echo "\n\n========== make zlog start =========="
+	# cd ./lib/zlog;make
+	# mv ./lib/zlog/src/*.so* ./lib/
+	# @echo "========== make zlog end =========="
 
-	@echo "\n\n========== make libevent start =========="
-	cd ./lib/libevent;autoreconf --install;autoconf configure.ac;./configure;make
-	@echo "========== make zlog end =========="
+	# @echo "\n\n========== make libevent start =========="
+	# cd ./lib/libevent;autoreconf --install;autoconf configure.ac;./configure;make
+	# @echo "========== make zlog end =========="
 
 test:
 
