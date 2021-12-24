@@ -122,3 +122,5 @@ lib/libevent/sample/signal-test
 lib/libevent/sample/time-test
 
 lib/libevent/sample/watch-timing
+
+.idea/
