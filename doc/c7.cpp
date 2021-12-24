@@ -24,9 +24,7 @@ class Son : public Base
 public:
     Son();
     ~Son();
-};
-
-Son::Son()
+};on::Son()
 {
     printf("===Son::Son===\n");
 }
