@@ -124,3 +124,5 @@ lib/libevent/sample/time-test
 lib/libevent/sample/watch-timing
 
 .idea/
+
+gameSvr
