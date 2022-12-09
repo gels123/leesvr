@@ -1,1 +1,2 @@
-# openGe
+# 关于clee-server
+clee-server是个人搭建的c/c++游戏服务器框架, 目标是参考skynet, actor模型, 支持海量协程。持续完善中...
