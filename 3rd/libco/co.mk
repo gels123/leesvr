@@ -23,8 +23,7 @@ MAIL_ROOT=.
 SRCROOT=.
 
 ##define the compliers
-CPP = g++
-CC  = gcc
+CPP = $(CXX)
 AR = ar -rc
 RANLIB = ranlib
 
@@ -41,8 +40,8 @@ ifneq ($v,release)
 BFLAGS= -g
 endif
 
-STATICLIBPATH=$(SRCROOT)/lib
-DYNAMICLIBPATH=$(SRCROOT)/solib
+STATICLIBPATH=$(SRCROOT)
+DYNAMICLIBPATH=$(SRCROOT)
 
 INCLS += -I$(SRCROOT)
 
