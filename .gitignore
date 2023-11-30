@@ -126,3 +126,4 @@ lib/libevent/sample/watch-timing
 .idea/
 
 gameSvr
+/cmake-build-debug
