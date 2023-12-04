@@ -1,15 +1,15 @@
-/**
- * 自定义信号处理
- */
+// 信号处理类
+// Created by gels on 2023/12/1.
+//
 #ifndef MYSIGNAL_H
 #define MYSIGNAL_H
-#pragma once
-	
-class MySignal  
+
+
+class Signal
 {
 public:
-	MySignal() = delete;
-	~MySignal() = delete;
+	Signal() = delete;
+	~Signal() = delete;
 
 public:
 	//init signal
@@ -19,4 +19,6 @@ public:
 	//dump the trace of the process.
 	static void DumpTrace();
 };
+
+
 #endif

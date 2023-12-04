@@ -9,7 +9,7 @@
 #include <string.h>
 #include <signal.h>	    /* for signal */
 #include <execinfo.h> 	/* for backtrace() */
-#include "mySignal.h"
+#include "Signal.h"
 
 void dev(int n, int m) {
     int a = n/m;

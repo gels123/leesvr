@@ -1,4 +1,4 @@
-#include "mySignal.h"
+#include "Signal.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -7,11 +7,11 @@
 	
 #define BACKTRACE_SIZE 16
 
-void MySignal::InitSignal()
+void Signal::InitSignal()
 {
 	struct sigaction sa;
 	sa.sa_flags = 0;
-	sa.sa_handler = MySignal::SignalHandler;
+	sa.sa_handler = Signal::SignalHandler;
 	sigemptyset(&sa.sa_mask);
 	// 程序异常终止
 	sigaction(SIGABRT, &sa, NULL);
@@ -47,7 +47,7 @@ void MySignal::InitSignal()
 	sigaction(SIGTTIN, &sa, NULL);
 }
  
-void MySignal::SignalHandler(int signo)
+void Signal::SignalHandler(int signo)
 {
 	switch(signo) {
 		case SIGABRT:
@@ -72,9 +72,9 @@ void MySignal::SignalHandler(int signo)
 			system((const char*) buff);
 			printf("==Dump address maps end==\n");
 
-			printf("\n========= MySignal::SignalHandler catch signal %d =========\n", signo);
+			printf("\n========= Signal::SignalHandler catch signal %d =========\n", signo);
 			printf("==Dump stack start==\n");
-			MySignal::DumpTrace();
+			Signal::DumpTrace();
 			printf("==Dump stack end==\n");
 			
 			//recover using default signal action, old code: signal(signo, SIG_DFL)
@@ -88,13 +88,13 @@ void MySignal::SignalHandler(int signo)
 			break;
 		}
 		default: {
-			printf("MySignal::SignalHandler not deal signal %d\n", signo);
+			printf("Signal::SignalHandler not deal signal %d\n", signo);
 			break;
 		}
 	}
 }
 
-void MySignal::DumpTrace()
+void Signal::DumpTrace()
 {
 	int j, nptrs;
 	void *buffer[BACKTRACE_SIZE];

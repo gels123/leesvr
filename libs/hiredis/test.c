@@ -1549,6 +1549,7 @@ static void test_pubsub_handling(struct config config) {
 #endif
 
 int main(int argc, char **argv) {
+    printf("=======================xxxx\n");
     struct config cfg = {
         .tcp = {
             .host = "127.0.0.1",

@@ -1,0 +1,8 @@
+在没有错误日志、没有coredump的情况下，如何排查进程死循环、死锁
+1. ps
+    ps -ef | grep xxx 找出pid
+
+2. pstack
+    pstack $pid 查看堆栈
+
+3. 
