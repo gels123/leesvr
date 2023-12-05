@@ -8,7 +8,7 @@
 #include <sys/time.h>
 #endif
 #include <assert.h>
-#include <signal.h>
+#include "../../doc/Signal.h"
 #include <errno.h>
 #include <limits.h>
 #include <math.h>

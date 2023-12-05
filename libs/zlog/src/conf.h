@@ -36,11 +36,14 @@ typedef struct zlog_conf_s {
 	zc_arraylist_t *formats;
 	zc_arraylist_t *rules;
 	int time_cache_count;
+	char log_level[MAXLEN_CFG_LINE + 1];
+	int level;
 } zlog_conf_t;
 
 extern zlog_conf_t * zlog_env_conf;
 
 zlog_conf_t *zlog_conf_new(const char *config);
+zlog_conf_t *zlog_conf_new_from_string(const char *config_string);
 void zlog_conf_del(zlog_conf_t * a_conf);
 void zlog_conf_profile(zlog_conf_t * a_conf, int flag);
 

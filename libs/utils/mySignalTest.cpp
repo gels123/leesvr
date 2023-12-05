@@ -7,9 +7,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-#include <signal.h>	    /* for signal */
+#include "../../doc/Signal.h"        /* for signal */
 #include <execinfo.h> 	/* for backtrace() */
-#include "Signal.h"
+#include "../../doc/Signal.h"
 
 void dev(int n, int m) {
     int a = n/m;

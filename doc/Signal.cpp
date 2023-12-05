@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <signal.h>	    /* for signal */
+#include "Signal.h"        /* for signal */
 #include <execinfo.h> 	/* for backtrace() */
 	
 #define BACKTRACE_SIZE 16

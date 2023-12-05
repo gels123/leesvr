@@ -30,7 +30,7 @@
 #ifndef evutil_socket_t
 #include "event2/util.h"
 #endif
-#include <signal.h>
+#include "../../doc/Signal.h"
 
 typedef void (*ev_sighandler_t)(int);
 
