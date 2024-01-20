@@ -33,13 +33,13 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/libs/coost)
 include_directories(${PROJECT_SOURCE_DIR}/libs/coost/include)
 
 # 可执行程序main
-add_executable(main main.cpp)
+add_executable(main tests/test_rvalue.cpp)
 target_link_libraries(main
-        pthread
-        utils
+#        pthread
+#        utils
 #        zlog
-        hiredis
-        co
+#        hiredis
+#        co
         )
 
 
