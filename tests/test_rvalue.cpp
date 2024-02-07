@@ -47,6 +47,18 @@ public:
 private:
     int num;
 };
+template<typename X>
+void ffvalue(X& x) {
+    printf("ffvalue x=%d\n", x);
+}
+template<typename X>
+void ffvalue(X&& x) {
+    printf("ffvalue x=%d\n", x);
+}
+template<typename X>
+void call_ffvalue(X&& x) {
+    ffvalue(std::forward<X>(x)); // 完美转发, X&&万能引用
+}
 
 int main(int argc, char** argv)
 {
@@ -67,10 +79,19 @@ int main(int argc, char** argv)
 
     int num = 0x00636261;//用16进制表示32位int，0x61是字符'a'的ASCII码
     int * pnum = &num;
-    char * pstr = reinterpret_cast<char*>(pnum);
+    char* str = reinterpret_cast<char*> (pnum);
     cout<<"pnum指针的值: "<<pnum<<endl; //0x7ff7bba296a0
-    cout<<"pstr指针的值: "<<static_cast<void *>(pstr)<<endl;//直接输出pstr会输出其指向的字符串，这里的类型转换是为了保证输出pstr的值 0x7ff7bba296a0
+    cout<<"pstr指针的值: "<<static_cast<void *>(str)<<endl;//直接输出pstr会输出其指向的字符串，这里的类型转换是为了保证输出pstr的值 0x7ff7bba296a0
     cout<<"pnum指向的内容: "<<hex<<*pnum<<endl; //636261
-    cout<<"pstr指向的内容: "<<pstr<<endl; //abc
+    cout<<"pstr指向的内容: "<<str<<endl; //abc
+
+    int m1 = 100;
+    int& m2 = m1;
+    int&& m3 = 200;
+    ffvalue(static_cast<int&>(m2));
+    ffvalue(static_cast<int&&>(m3));
+    call_ffvalue(m2);
+    call_ffvalue(m3);
+
     return 0;
 }

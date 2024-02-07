@@ -6,6 +6,7 @@
 #include<string.h>
 #include<stdlib.h>
 #include<mutex>
+#include<unistd.h>
 
 // void *f(void *t) {
 //     int *num = (int*) t;
@@ -31,26 +32,38 @@
 int cnt = 0;
 std::mutex m;
 void f1(int *num) {
-    std::lock_guard<std::mutex> lock(m);
-    // m.lock();
-    *num = 100;
-    (*num)++;
-    printf("f1 num=%d threadid=%ld\n", *num, std::this_thread::get_id());
-    // m.unlock();
+    while(true) {
+        {
+            std::lock_guard<std::mutex> lock(m);
+            // m.lock();
+            *num = 100;
+            (*num)++;
+            printf("f11 num=%d threadid=%ld\n", *num, std::this_thread::get_id());
+            // m.unlock();
+        }
+        sleep(1);
+    }
 }
 void f2(int *num) {
-    std::lock_guard<std::mutex> lock(m);
-    // m.lock();
-    *num = 200;
-    (*num)--;
-    printf("f2 num=%d threadid=%ld\n", *num, std::this_thread::get_id());
-    m.unlock();
+    while(true) {
+        {
+            std::lock_guard<std::mutex> lock(m);
+            // m.lock();
+            *num = 200;
+            (*num)--;
+            printf("f22 num=%d threadid=%ld\n", *num, std::this_thread::get_id());
+            //m.unlock();
+        }
+        sleep(1);
+    }
 }
 int main(int n, char *argv[]) {
     printf("===test==\n");
     std::thread t1(f1, &cnt);
     std::thread *t2 = new std::thread(f2, &cnt);
-    t1.join();
-    t2->join();
+    t1.detach();
+    if (t2->joinable()) {
+        t2->join();
+    }
     return 0;
 }
