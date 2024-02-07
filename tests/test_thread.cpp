@@ -61,9 +61,9 @@ int main(int n, char *argv[]) {
     printf("===test==\n");
     std::thread t1(f1, &cnt);
     std::thread *t2 = new std::thread(f2, &cnt);
-    t1.detach();
+    t1.detach(); //t1自由执行
     if (t2->joinable()) {
-        t2->join();
+        t2->join();//当前线程等待t2结束
     }
     return 0;
 }
