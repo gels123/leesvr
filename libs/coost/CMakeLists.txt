@@ -43,7 +43,7 @@ option(WITH_LIBCURL "build with libcurl" OFF)
 option(WITH_BACKTRACE "build with libbacktrace" OFF)
 
 # build with -fPIC
-option(FPIC "build with -fPIC" ON)
+option(FPIC "build with -FPIC" ON)
 
 # build all projects (libco, gen, test, unitest)
 option(BUILD_ALL "Build all projects" OFF)

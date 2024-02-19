@@ -33,7 +33,7 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/libs/coost)
 include_directories(${PROJECT_SOURCE_DIR}/libs/coost/include)
 
 # 可执行程序main
-add_executable(main tests/test_operator_new.cpp)
+add_executable(main tests/test_dp.cpp)
 target_link_libraries(main
 #        pthread
 #        utils
