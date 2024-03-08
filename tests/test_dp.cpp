@@ -26,6 +26,7 @@ int dp(sitem *items, int n, int& maxweight, vector<int>& vec) {
 
         vec[w] = maxval;
     }
+
     return vec.at(maxweight);
 }
 
