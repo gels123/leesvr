@@ -67,7 +67,7 @@ void Proto2Server(const char *program, const char *pb_file,
         return;
     }
 
-    NameRender name_render(syntax_tree.prefix());
+    NameRender name_render(syntax_tree.GetPrefix());
     ServerCodeRender code_render(name_render);
 
     char filename[256]{0}, tmp[256]{0};

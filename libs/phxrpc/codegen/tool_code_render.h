@@ -33,7 +33,7 @@ class SyntaxTree;
 class ToolCodeRender {
   public:
     ToolCodeRender(NameRender &name_render);
-    virtual ~ToolCodeRender();
+    ~ToolCodeRender();
 
     void GenerateToolHpp(SyntaxTree *stree, FILE *write);
 

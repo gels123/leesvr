@@ -45,7 +45,6 @@ void PrintHelp(const char *program) {
     printf(" Usage: -f <proto file>             # proto file\n");
     printf("        -d <dir>                    # destination file dir\n");
     printf("        -I <dir>                    # include path dir\n");
-    printf("        -u <uthread mode>           # uthread mode\n");
     printf("        -v                          # print this screen\n");
     printf("\n");
 
@@ -62,7 +61,7 @@ void Proto2Client(const char *program, const char *pb_file,
         return;
     }
 
-    NameRender name_render(syntax_tree.prefix());
+    NameRender name_render(syntax_tree.GetPrefix());
     ClientCodeRender code_render(name_render);
 
     char filename[256]{0}, tmp[256]{0};

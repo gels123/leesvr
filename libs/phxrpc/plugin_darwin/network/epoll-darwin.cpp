@@ -24,7 +24,7 @@ See the AUTHORS file for names of contributors.
 #include <cstdlib>
 #include <errno.h>
 #include <poll.h>
-#include "../../../../doc/Signal.h"
+#include <signal.h>
 #include <sys/event.h>
 #include <sys/param.h>
 #include <sys/time.h>

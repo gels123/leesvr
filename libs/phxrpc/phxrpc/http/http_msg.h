@@ -1,19 +1,19 @@
 /*
-Tencent is pleased to support the open source community by making
+Tencent is pleased to support the open source community by making 
 PhxRPC available.
-Copyright (C) 2016 THL A29 Limited, a Tencent company.
+Copyright (C) 2016 THL A29 Limited, a Tencent company. 
 All rights reserved.
 
-Licensed under the BSD 3-Clause License (the "License"); you may
-not use this file except in compliance with the License. You may
+Licensed under the BSD 3-Clause License (the "License"); you may 
+not use this file except in compliance with the License. You may 
 obtain a copy of the License at
 
 https://opensource.org/licenses/BSD-3-Clause
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" basis,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-implied. See the License for the specific language governing
+Unless required by applicable law or agreed to in writing, software 
+distributed under the License is distributed on an "AS IS" basis, 
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or 
+implied. See the License for the specific language governing 
 permissions and limitations under the License.
 
 See the AUTHORS file for names of contributors.
@@ -24,121 +24,102 @@ See the AUTHORS file for names of contributors.
 #include <vector>
 #include <string>
 
-#include "phxrpc/msg.h"
-
-
 namespace phxrpc {
 
+class HttpMessage {
+ public:
+    static const char * HEADER_CONTENT_LENGTH;
+    static const char * HEADER_CONTENT_TYPE;
+    static const char * HEADER_CONNECTION;
+    static const char * HEADER_PROXY_CONNECTION;
+    static const char * HEADER_TRANSFER_ENCODING;
+    static const char * HEADER_DATE;
+    static const char * HEADER_SERVER;
 
-class HttpMessage : virtual public BaseMessage {
-  public:
-    enum class Direction {
-        NONE = 0,
-        REQUEST,
-        RESPONSE,
-        MAX,
+    static const char * HEADER_X_PHXRPC_RESULT;
+
+ public:
+    HttpMessage(int type);
+    virtual ~HttpMessage();
+
+    enum {
+        eRequest,
+        eResponse
     };
+    int GetType() const;
 
-    static const char *HEADER_CONTENT_LENGTH;
-    static const char *HEADER_CONTENT_TYPE;
-    static const char *HEADER_CONNECTION;
-    static const char *HEADER_PROXY_CONNECTION;
-    static const char *HEADER_TRANSFER_ENCODING;
-    static const char *HEADER_DATE;
-    static const char *HEADER_SERVER;
+    void SetVersion(const char * version);
+    const char * GetVersion() const;
 
-    static const char *HEADER_X_PHXRPC_RESULT;
+    void AppendContent(const void * content, int length = 0, int max_length = 0);
+    void SetContent(const void * content, int length = 0);
+    const std::string & GetContent() const;
+    std::string & GetContent();
 
-    HttpMessage() = default;
-    virtual ~HttpMessage() override = default;
-
-    virtual int ToPb(google::protobuf::Message *const message) const override;
-    virtual int FromPb(const google::protobuf::Message &message) override;
-    virtual size_t size() const override;
-
-    void AddHeader(const char *name, const char *value);
-    void AddHeader(const char *name, int value);
-    bool RemoveHeader(const char *name);
+    void AddHeader(const char * name, const char * value);
+    void AddHeader(const char * name, int value);
+    bool RemoveHeader(const char * name);
     size_t GetHeaderCount() const;
-    const char *GetHeaderName(size_t index) const;
-    const char *GetHeaderValue(size_t index) const;
-    const char *GetHeaderValue(const char *name) const;
-    void AppendContent(const void *content, const int length = 0, const int max_length = 0);
+    const char * GetHeaderName(size_t index) const;
+    const char * GetHeaderValue(size_t index) const;
+    const char * GetHeaderValue(const char * name) const;
 
-    const std::string &content() const;
-    void set_content(const char *const content, const int length = 0);
-    std::string *mutable_content();
+    int IsKeepAlive() const;
 
-    const char *version() const;
-    void set_version(const char *version);
+ protected:
+    const int type_;
 
-    Direction direction() const { return direction_; }
-
-  protected:
-    void set_direction(const Direction direction) { direction_ = direction; }
+    char version_[16];
+    std::string content_;
 
     std::vector<std::string> header_name_list_, header_value_list_;
-
-  private:
-    std::string content_;
-    char version_[16];
-    Direction direction_{Direction::NONE};
 };
 
-class HttpRequest : public HttpMessage, public BaseRequest {
-  public:
+class HttpRequest : public HttpMessage {
+ public:
     HttpRequest();
-    virtual ~HttpRequest() override;
+    virtual ~HttpRequest();
 
-    virtual int Send(BaseTcpStream &socket) const override;
+    void SetMethod(const char * method);
+    const char * GetMethod() const;
 
-    virtual BaseResponse *GenResponse() const override;
-    virtual bool keep_alive() const override;
-    virtual void set_keep_alive(const bool keep_alive) override;
+    int IsMethod(const char * method) const;
 
-    void AddParam(const char *name, const char *value);
-    bool RemoveParam(const char *name);
+    void SetURI(const char * uri);
+    const char * GetURI() const;
+
+    void SetClientIP(const char * client_ip);
+    const char * GetClientIP() const;
+
+    void AddParam(const char * name, const char * value);
+    bool RemoveParam(const char * name);
     size_t GetParamCount() const;
-    const char *GetParamName(size_t index) const;
-    const char *GetParamValue(size_t index) const;
-    const char *GetParamValue(const char *name) const;
+    const char * GetParamName(size_t index) const;
+    const char * GetParamValue(size_t index) const;
+    const char * GetParamValue(const char * name) const;
 
-    int IsMethod(const char *method) const;
-
-    const char *method() const;
-    void set_method(const char *method);
-
-  private:
-    char method_[16];
+ private:
+    char method_[16], client_ip_[16];
+    std::string uri_;
 
     std::vector<std::string> param_name_list_, param_value_list_;
 };
 
-class HttpResponse : public HttpMessage, public BaseResponse {
-  public:
+class HttpResponse : public HttpMessage {
+ public:
     HttpResponse();
-    virtual ~HttpResponse() override;
+    virtual ~HttpResponse();
 
-    virtual int Send(BaseTcpStream &socket) const override;
+    void SetStatusCode(int status_code);
+    int GetStatusCode() const;
 
-    virtual void SetFake(FakeReason reason) override;
+    void SetReasonPhrase(const char * reason_phrase);
+    const char * GetReasonPhrase() const;
 
-    virtual int Modify(const bool keep_alive, const std::string &version) override;
-
-    virtual int result() override;
-    virtual void set_result(const int result) override;
-
-    void set_status_code(int status_code);
-    int status_code() const;
-
-    void set_reason_phrase(const char *reason_phrase);
-    const char *reason_phrase() const;
-
-  private:
+ private:
     int status_code_;
     char reason_phrase_[128];
 };
 
-
-}  // namespace phxrpc
+}
 

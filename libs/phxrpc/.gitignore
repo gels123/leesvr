@@ -2,7 +2,6 @@
 *.a
 *.pb.*
 *_dispatcher.*
-!base_dispatcher.*
 *_stub.*
 *_service.*
 *_tool.*
@@ -10,4 +9,3 @@
 third_party/*
 sbin/*
 sample/*
-

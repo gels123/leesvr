@@ -21,35 +21,39 @@ See the AUTHORS file for names of contributors.
 
 #pragma once
 
-#include <memory>
+#include <atomic>
+#include <condition_variable>
+#include <functional>
+#include <map>
+#include <mutex>
 #include <thread>
+#include <vector>
 
+#include "phxrpc/network.h"
 #include "phxrpc/http.h"
-#include "phxrpc/msg.h"
 
-#include "phxrpc/rpc/server_base.h"
-#include "phxrpc/rpc/server_config.h"
-#include "phxrpc/rpc/server_monitor.h"
-#include "phxrpc/rpc/thread_queue.h"
+#include "server_base.h"
+#include "server_config.h"
+#include "server_monitor.h"
+#include "thread_queue.h"
 
 
 namespace phxrpc {
 
 
-class DataFlow final {
+class WorkerPool;
+
+class DataFlow {
   public:
     DataFlow();
     ~DataFlow();
 
-    void PushRequest(void *args, BaseRequest *req);
-    int PluckRequest(void *&args, BaseRequest *&req);
-    int PickRequest(void *&args, BaseRequest *&req);
-    void PushResponse(void *args, BaseResponse *resp);
-    int PluckResponse(void *&args, BaseResponse *&resp);
-    int PickResponse(void *&args, BaseResponse *&resp);
+    void PushRequest(void *args, HttpRequest *request);
+    int PluckRequest(void *&args, HttpRequest *&request);
+    int PickRequest(void *&args, HttpRequest *&request);
+    void PushResponse(void *args, HttpResponse *response);
+    int PluckResponse(void *&args, HttpResponse *&response);
     bool CanPushRequest(const int max_queue_length);
-    bool CanPushResponse(const int max_queue_length);
-    bool CanPluckRequest();
     bool CanPluckResponse();
 
     void BreakOut();
@@ -67,21 +71,18 @@ class DataFlow final {
         uint64_t enqueue_time_ms;
         void *args;
     };
-
-    ThdQueue<std::pair<QueueExtData, BaseRequest *>> in_queue_;
-    ThdQueue<std::pair<QueueExtData, BaseResponse *>> out_queue_;
+    ThdQueue<std::pair<QueueExtData, HttpRequest *>> in_queue_;
+    ThdQueue<std::pair<QueueExtData, HttpResponse *>> out_queue_;
 };
 
+/////////////////////////////////
 
 #define RPC_TIME_COST_CAL_RATE 1000
 #define QUEUE_WAIT_TIME_COST_CAL_RATE 1000
 #define MAX_QUEUE_WAIT_TIME_COST 500
 #define MAX_ACCEPT_QUEUE_LENGTH 102400
 
-
-class WorkerPool;
-
-class HshaServerStat final {
+class HshaServerStat {
   public:
     HshaServerStat(const HshaServerConfig *config, ServerMonitorPtr hsha_server_monitor);
     ~HshaServerStat();
@@ -101,15 +102,11 @@ class HshaServerStat final {
     void MonitorReport();
 
     friend class HshaServerIO;
-    friend class FaServerIO;
     friend class WorkerPool;
     friend class Worker;
     friend class HshaServerQos;
     friend class HshaServerAcceptor;
-    friend class FaServerAcceptor;
-    //const HshaServerConfig *config_;
-
-  public:
+    const HshaServerConfig *config_;
     std::mutex mutex_;
     std::condition_variable cv_;
     std::thread thread_;
@@ -177,16 +174,14 @@ class HshaServerStat final {
 
     std::atomic_int worker_drop_requests_;
     int worker_drop_reqeust_qps_;
-
     std::atomic_long worker_time_costs_;
-    std::atomic_int worker_time_costs_count_;
-    int worker_avg_time_cost_per_second_;
-    int worker_time_cost_per_period_;
     long worker_time_costs_per_second_;
 };
 
 
-class HshaServerQos final {
+//////////////////////////////////
+
+class HshaServerQos {
   public:
     HshaServerQos(const HshaServerConfig *config, HshaServerStat *hsha_server_stat);
     ~HshaServerQos();
@@ -196,21 +191,21 @@ class HshaServerQos final {
     bool CanEnqueue();
 
   private:
-    const HshaServerConfig *config_{nullptr};
-    HshaServerStat *hsha_server_stat_{nullptr};
+    const HshaServerConfig *config_;
+    HshaServerStat *hsha_server_stat_;
     std::mutex mutex_;
     std::condition_variable cv_;
     std::thread thread_;
-    bool break_out_{false};
-    int enqueue_reject_rate_{0};
-    int inqueue_avg_wait_time_costs_per_second_cal_last_seq_{0};
+    bool break_out_;
+    int enqueue_reject_rate_;
+    int inqueue_avg_wait_time_costs_per_second_cal_last_seq_;
 };
 
+//////////////////////////////////
 
-class Worker final {
+class Worker {
   public:
-    Worker(const int idx, WorkerPool *const pool,
-           const int uthread_count, const int uthread_stack_size);
+    Worker(WorkerPool *pool, int uthread_count, int utherad_stack_size);
     ~Worker();
 
     void Func();
@@ -219,150 +214,141 @@ class Worker final {
     void ThreadMode();
     void UThreadMode();
     void HandlerNewRequestFunc();
-    void UThreadFunc(void *args, BaseRequest *req, int queue_wait_time_ms);
-    void WorkerLogic(void *args, BaseRequest *req, int queue_wait_time_ms);
-    void NotifyEpoll();
+    void UThreadFunc(void *args, HttpRequest *request, int queue_wait_time_ms);
+    void WorkerLogic(void *args, HttpRequest *request, int queue_wait_time_ms);
+    void Notify();
 
   private:
-    int idx_{-1};
-    WorkerPool *pool_{nullptr};
+    WorkerPool *pool_;
     int uthread_count_;
-    int uthread_stack_size_;
-    bool shut_down_{false};
-    UThreadEpollScheduler *worker_scheduler_{nullptr};
+    int utherad_stack_size_;
+    bool shut_down_;
+    UThreadEpollScheduler *worker_scheduler_;
     std::thread thread_;
 };
 
+/////////////////////////////////
 
-typedef std::function<void (const BaseRequest &, BaseResponse *const, DispatcherArgs_t *const)> Dispatch_t;
+typedef std::function<void(const HttpRequest &, HttpResponse *, DispatcherArgs_t *)> Dispatch_t;
 
-class ServerMgr;
-
-class WorkerPool final {
+class WorkerPool {
   public:
-    WorkerPool(const int idx, UThreadEpollScheduler *const scheduler,
-               const HshaServerConfig *const config,
-               const int thread_count,
-               const int uthread_count_per_thread,
-               const int uthread_stack_size,
-               DataFlow *const data_flow,
-               HshaServerStat *const hsha_server_stat,
+    WorkerPool(UThreadEpollScheduler *scheduler,
+               int thread_count,
+               int uthread_count_per_thread,
+               int utherad_stack_size,
+               DataFlow *data_flow,
+               HshaServerStat *hsha_server_stat,
                Dispatch_t dispatch,
                void *args);
     ~WorkerPool();
 
-    void NotifyEpoll();
+    void Notify();
 
   private:
     friend class Worker;
-    int idx_{-1};
-    UThreadEpollScheduler *scheduler_{nullptr};
-    const HshaServerConfig *config_{nullptr};
-    DataFlow *data_flow_{nullptr};
-    HshaServerStat *hsha_server_stat_{nullptr};
+    UThreadEpollScheduler *scheduler_;
+    DataFlow *data_flow_;
+    HshaServerStat *hsha_server_stat_;
     Dispatch_t dispatch_;
-    void *args_{nullptr};
+    void *args_;
     std::vector<Worker *> worker_list_;
     size_t last_notify_idx_;
     std::mutex mutex_;
 };
 
+/////////////////////////////////
 
-class HshaServerIO final {
+class HshaServerIO {
   public:
-    HshaServerIO(const int idx, UThreadEpollScheduler *const scheduler,
-                 const HshaServerConfig *config,
-                 DataFlow *data_flow, HshaServerStat *hsha_server_stat,
-                 HshaServerQos *hsha_server_qos, WorkerPool *worker_pool,
-                 phxrpc::BaseMessageHandlerFactoryCreateFunc msg_handler_factory_create_func);
+    HshaServerIO(int idx, UThreadEpollScheduler *scheduler, const HshaServerConfig *config,
+                 DataFlow *data_flow, HshaServerStat *hsha_server_stat, HshaServerQos *hsha_server_qos,
+                 WorkerPool *worker_pool);
     ~HshaServerIO();
 
     void RunForever();
-    bool AddAcceptedFd(const int accepted_fd);
+
+    bool AddAcceptedFd(int accepted_fd);
+
     void HandlerAcceptedFd();
+
     void IOFunc(int accept_fd);
+
     UThreadSocket_t *ActiveSocketFunc();
 
   private:
-    int idx_{-1};
-    UThreadEpollScheduler *scheduler_{nullptr};
-    const HshaServerConfig *config_{nullptr};
-    DataFlow *data_flow_{nullptr};
-    HshaServerStat *hsha_server_stat_{nullptr};
-    HshaServerQos *hsha_server_qos_{nullptr};
-    WorkerPool *worker_pool_{nullptr};
-    std::unique_ptr<BaseMessageHandlerFactory> msg_handler_factory_;
+    int idx_;
+    UThreadEpollScheduler *scheduler_;
+    const HshaServerConfig *config_;
+    DataFlow *data_flow_;
+    int listen_fd_;
+    HshaServerStat *hsha_server_stat_;
+    HshaServerQos *hsha_server_qos_;
+    WorkerPool *worker_pool_;
+
     std::queue<int> accepted_fd_list_;
     std::mutex queue_mutex_;
 };
 
+/////////////////////////////////
 
 class HshaServer;
 
 class HshaServerUnit {
   public:
-    HshaServerUnit(const int idx,
-                   HshaServer *const hsha_server,
+    HshaServerUnit(HshaServer *hsha_server,
+                   int idx,
                    int worker_thread_count,
                    int worker_uthread_count_per_thread,
-                   int worker_uthread_stack_size,
-                   Dispatch_t dispatch, void *args);
-    virtual ~HshaServerUnit();
+                   int worker_utherad_stack_size,
+                   Dispatch_t dispatch,
+                   void *args);
+    ~HshaServerUnit();
 
     void RunFunc();
-    bool AddAcceptedFd(const int accepted_fd);
+    bool AddAcceptedFd(int accepted_fd);
 
   private:
-    HshaServer *hsha_server_{nullptr};
+    HshaServer *hsha_server_;
     UThreadEpollScheduler scheduler_;
     DataFlow data_flow_;
     WorkerPool worker_pool_;
     HshaServerIO hsha_server_io_;
-
     std::thread thread_;
 };
 
+/////////////////////////////////
 
-class HshaServerAcceptor final {
+class HshaServerAcceptor {
   public:
     HshaServerAcceptor(HshaServer *hsha_server);
     ~HshaServerAcceptor();
 
-    void LoopAccept(const char *const bind_ip, const int port);
+    void LoopAccept(const char *bind_ip, const int port);
 
   private:
-    HshaServer *hsha_server_{nullptr};
-    size_t idx_{0};
+    HshaServer *hsha_server_;
+    size_t idx_;
 };
 
+/////////////////////////////////
 
 class HshaServer {
   public:
-    HshaServer(const HshaServerConfig &config, const Dispatch_t &dispatch, void *args,
-               phxrpc::BaseMessageHandlerFactoryCreateFunc msg_handler_factory_create_func =
-               []()->std::unique_ptr<phxrpc::HttpMessageHandlerFactory> {
-        return std::unique_ptr<phxrpc::HttpMessageHandlerFactory>(new phxrpc::HttpMessageHandlerFactory);
-    });
-    virtual ~HshaServer();
+    HshaServer(const HshaServerConfig &config, Dispatch_t dispatch, void *args);
+    ~HshaServer();
 
     void RunForever();
 
-  private:
-    friend class HshaServerAcceptor;
-    friend class HshaServerUnit;
-
-    const HshaServerConfig *config_{nullptr};
-    phxrpc::BaseMessageHandlerFactoryCreateFunc msg_handler_factory_create_func_;
+    const HshaServerConfig *config_;
     ServerMonitorPtr hsha_server_monitor_;
     HshaServerStat hsha_server_stat_;
     HshaServerQos hsha_server_qos_;
     HshaServerAcceptor hsha_server_acceptor_;
 
     std::vector<HshaServerUnit *> server_unit_list_;
-
-    void LoopReadCrossUnitResponse();
 };
 
 
-}  //namespace phxrpc
+} //namespace phxrpc
 
