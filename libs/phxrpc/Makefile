@@ -17,10 +17,10 @@ phxrpc-$(version).src.tar.gz:
 	@(cd ..; rm phxrpc-$(version))
 
 clean:
-	@( rm -rf lib/*; )
+	@( rm -rf lib; )
 	@( cd phxrpc; make clean )
-	@( cd codegen; make clean )
-	@( cd sample; test -f Makefile && make clean )
 	@( cd plugin_boost; make clean )
 	@( cd plugin_darwin; make clean )
+	@( cd codegen; make clean )
+	@( cd sample; test -f Makefile && make clean )
 

@@ -1,6 +1,6 @@
 #--------------------------------------------------------------------
 
-debug = y
+debug= y
 
 where-am-i = $(abspath $(word $(words $(MAKEFILE_LIST)), $(MAKEFILE_LIST)))
 
