@@ -43,7 +43,7 @@ include_directories(${PROJECT_SOURCE_DIR}/libs/coost/include)
 #        )
 
 # 可执行程序test
-add_executable(test tests/testtmp.cpp)
+add_executable(test tests/test20240402.cpp)
 target_link_libraries(test)
 
 
