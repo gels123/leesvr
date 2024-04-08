@@ -26,11 +26,14 @@ public:
     }
     T(T&& t) {
         printf("==移动构造==\n");
-        num = t.num;
+        //num = t.num;
+        *this = std::move(t); //调用移动赋值运算符
     }
     T& operator=(T&& t) {
         printf("==移动赋值构造==\n");
         num = t.num;
+        //if (this->ptr) { delete this->ptr; this->ptr = nullptr} //先释放自身资源
+        //this->ptr = t.ptr; t.ptr = nullptr;//接手ptr,并将源ptr赋值为0防止,重复释放
         return *this;
     }
     T createT(int num) {

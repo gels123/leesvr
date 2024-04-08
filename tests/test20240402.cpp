@@ -70,11 +70,71 @@ void fff() {
     p3.get()->print();
 }
 
+class ClsReview {
+public:
+    ClsReview() { //构造
+        num = 0;
+        printf("ClsReview() %d\n", num);
+    }
+    ClsReview(int n) { //构造
+        this->num = n;
+        printf("ClsReview(int n) %d\n", num);
+    }
+    ~ClsReview() { //析构
+        printf("~ClsReview() %d\n", num);
+    }
+    ClsReview(const ClsReview& c) { //赋值构造
+        printf("ClsReview(const ClsReview& c)\n");
+        this->num = c.num;
+    }
+    ClsReview& operator=(const ClsReview& c) { //赋值构造
+        printf("ClsReview& operator=(const ClsReview& c)\n");
+        if(this == &c) {
+            return *this;
+        }
+        this->num = c.num;
+        return *this;
+    }
+    ClsReview(ClsReview&& c) { // 移动构造
+        printf("ClsReview(ClsReview&& c)\n");
+        this->num = c.num;
+    }
+    ClsReview& operator=(ClsReview&& c) { // 移动赋值构造
+        printf("ClsReview& operator=(ClsReview&& c)\n");
+        if (this == &c) {
+            return *this;
+        }
+        this->num = c.num;
+        return *this;
+    }
+    static ClsReview createIns() {
+        ClsReview c(666);
+        return c;
+    }
+private:
+    int num;
+};
+
 int main() {
     printf("== main begin ==\n");
     f();
     ff();
     fff();
+    int i = 0, j=0;
+    printf("++i=%d j++=%d\n", ++i, j++);
     printf("== main end ==\n");
+    {
+        ClsReview t1(100);
+        ClsReview t2 = t1;
+        ClsReview t3(200);
+        t3 = t2;
+        printf("-----1\n");
+        ClsReview t4;
+        t4 = ClsReview::createIns();
+        printf("-----2\n");
+//        ClsReview t5(t1.createIns());
+//        printf("-----3\n");
+    }
+
     return 0;
 }
