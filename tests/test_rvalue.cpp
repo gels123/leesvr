@@ -20,7 +20,7 @@ public:
         num = t.num;
     }
     T& operator=(const T& t) {
-        printf("==拷贝赋值构造==\n");
+        printf("==赋值构造==\n");
         num = t.num;
         return *this;
     }
