@@ -10,6 +10,10 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
 set(CMAKE_PDB_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
 
+# protobuf
+include_directories(${PROJECT_SOURCE_DIR}/3rd/protobuf/include)
+link_directories(${PROJECT_SOURCE_DIR}/3rd/protobuf/lib)
+
 # 工具类库
 add_subdirectory(${PROJECT_SOURCE_DIR}/libs/utils)
 include_directories(${PROJECT_SOURCE_DIR}/libs/utils)
@@ -36,6 +40,7 @@ include_directories(${PROJECT_SOURCE_DIR}/libs/coost/include)
 add_executable(main tests/testprotobuf.cpp)
 target_link_libraries(main
         pthread
+        protobuf
 #        utils
 #        zlog
 #        hiredism

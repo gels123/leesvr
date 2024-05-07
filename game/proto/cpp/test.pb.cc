@@ -19,9 +19,9 @@
 
 namespace {
 
-const ::google::protobuf::Descriptor* TestReq_descriptor_ = NULL;
+const ::google::protobuf::Descriptor* sTest_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
-  TestReq_reflection_ = NULL;
+  sTest_reflection_ = NULL;
 
 }  // namespace
 
@@ -33,23 +33,23 @@ void protobuf_AssignDesc_test_2eproto() {
     ::google::protobuf::DescriptorPool::generated_pool()->FindFileByName(
       "test.proto");
   GOOGLE_CHECK(file != NULL);
-  TestReq_descriptor_ = file->message_type(0);
-  static const int TestReq_offsets_[3] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TestReq, uid_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TestReq, name_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TestReq, nums_),
+  sTest_descriptor_ = file->message_type(0);
+  static const int sTest_offsets_[3] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(sTest, uid_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(sTest, name_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(sTest, nums_),
   };
-  TestReq_reflection_ =
+  sTest_reflection_ =
     ::google::protobuf::internal::GeneratedMessageReflection::NewGeneratedMessageReflection(
-      TestReq_descriptor_,
-      TestReq::default_instance_,
-      TestReq_offsets_,
+      sTest_descriptor_,
+      sTest::default_instance_,
+      sTest_offsets_,
       -1,
       -1,
       -1,
-      sizeof(TestReq),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TestReq, _internal_metadata_),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TestReq, _is_default_instance_));
+      sizeof(sTest),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(sTest, _internal_metadata_),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(sTest, _is_default_instance_));
 }
 
 namespace {
@@ -64,14 +64,14 @@ void protobuf_RegisterTypes(const ::std::string&) GOOGLE_ATTRIBUTE_COLD;
 void protobuf_RegisterTypes(const ::std::string&) {
   protobuf_AssignDescriptorsOnce();
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-      TestReq_descriptor_, &TestReq::default_instance());
+      sTest_descriptor_, &sTest::default_instance());
 }
 
 }  // namespace
 
 void protobuf_ShutdownFile_test_2eproto() {
-  delete TestReq::default_instance_;
-  delete TestReq_reflection_;
+  delete sTest::default_instance_;
+  delete sTest_reflection_;
 }
 
 void protobuf_AddDesc_test_2eproto() GOOGLE_ATTRIBUTE_COLD;
@@ -82,12 +82,12 @@ void protobuf_AddDesc_test_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\ntest.proto\"2\n\007TestReq\022\013\n\003uid\030\001 \001(\005\022\014\n\004"
-    "name\030\002 \001(\t\022\014\n\004nums\030\003 \003(\005b\006proto3", 72);
+    "\n\ntest.proto\"0\n\005sTest\022\013\n\003uid\030\001 \001(\005\022\014\n\004na"
+    "me\030\002 \001(\t\022\014\n\004nums\030\003 \003(\005b\006proto3", 70);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "test.proto", &protobuf_RegisterTypes);
-  TestReq::default_instance_ = new TestReq();
-  TestReq::default_instance_->InitAsDefaultInstance();
+  sTest::default_instance_ = new sTest();
+  sTest::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_test_2eproto);
 }
 
@@ -101,30 +101,30 @@ struct StaticDescriptorInitializer_test_2eproto {
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int TestReq::kUidFieldNumber;
-const int TestReq::kNameFieldNumber;
-const int TestReq::kNumsFieldNumber;
+const int sTest::kUidFieldNumber;
+const int sTest::kNameFieldNumber;
+const int sTest::kNumsFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
-TestReq::TestReq()
+sTest::sTest()
   : ::google::protobuf::Message(), _internal_metadata_(NULL) {
   SharedCtor();
-  // @@protoc_insertion_point(constructor:TestReq)
+  // @@protoc_insertion_point(constructor:sTest)
 }
 
-void TestReq::InitAsDefaultInstance() {
+void sTest::InitAsDefaultInstance() {
   _is_default_instance_ = true;
 }
 
-TestReq::TestReq(const TestReq& from)
+sTest::sTest(const sTest& from)
   : ::google::protobuf::Message(),
     _internal_metadata_(NULL) {
   SharedCtor();
   MergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:TestReq)
+  // @@protoc_insertion_point(copy_constructor:sTest)
 }
 
-void TestReq::SharedCtor() {
+void sTest::SharedCtor() {
     _is_default_instance_ = false;
   ::google::protobuf::internal::GetEmptyString();
   _cached_size_ = 0;
@@ -132,54 +132,54 @@ void TestReq::SharedCtor() {
   name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
-TestReq::~TestReq() {
-  // @@protoc_insertion_point(destructor:TestReq)
+sTest::~sTest() {
+  // @@protoc_insertion_point(destructor:sTest)
   SharedDtor();
 }
 
-void TestReq::SharedDtor() {
+void sTest::SharedDtor() {
   name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (this != default_instance_) {
   }
 }
 
-void TestReq::SetCachedSize(int size) const {
+void sTest::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const ::google::protobuf::Descriptor* TestReq::descriptor() {
+const ::google::protobuf::Descriptor* sTest::descriptor() {
   protobuf_AssignDescriptorsOnce();
-  return TestReq_descriptor_;
+  return sTest_descriptor_;
 }
 
-const TestReq& TestReq::default_instance() {
+const sTest& sTest::default_instance() {
   if (default_instance_ == NULL) protobuf_AddDesc_test_2eproto();
   return *default_instance_;
 }
 
-TestReq* TestReq::default_instance_ = NULL;
+sTest* sTest::default_instance_ = NULL;
 
-TestReq* TestReq::New(::google::protobuf::Arena* arena) const {
-  TestReq* n = new TestReq;
+sTest* sTest::New(::google::protobuf::Arena* arena) const {
+  sTest* n = new sTest;
   if (arena != NULL) {
     arena->Own(n);
   }
   return n;
 }
 
-void TestReq::Clear() {
-// @@protoc_insertion_point(message_clear_start:TestReq)
+void sTest::Clear() {
+// @@protoc_insertion_point(message_clear_start:sTest)
   uid_ = 0;
   name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   nums_.Clear();
 }
 
-bool TestReq::MergePartialFromCodedStream(
+bool sTest::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:TestReq)
+  // @@protoc_insertion_point(parse_start:sTest)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
     tag = p.first;
@@ -208,7 +208,7 @@ bool TestReq::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->name().data(), this->name().length(),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "TestReq.name"));
+            "sTest.name"));
         } else {
           goto handle_unusual;
         }
@@ -247,17 +247,17 @@ bool TestReq::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:TestReq)
+  // @@protoc_insertion_point(parse_success:sTest)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:TestReq)
+  // @@protoc_insertion_point(parse_failure:sTest)
   return false;
 #undef DO_
 }
 
-void TestReq::SerializeWithCachedSizes(
+void sTest::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:TestReq)
+  // @@protoc_insertion_point(serialize_start:sTest)
   // optional int32 uid = 1;
   if (this->uid() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->uid(), output);
@@ -268,7 +268,7 @@ void TestReq::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->name().data(), this->name().length(),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "TestReq.name");
+      "sTest.name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       2, this->name(), output);
   }
@@ -283,12 +283,12 @@ void TestReq::SerializeWithCachedSizes(
       this->nums(i), output);
   }
 
-  // @@protoc_insertion_point(serialize_end:TestReq)
+  // @@protoc_insertion_point(serialize_end:sTest)
 }
 
-::google::protobuf::uint8* TestReq::InternalSerializeWithCachedSizesToArray(
+::google::protobuf::uint8* sTest::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:TestReq)
+  // @@protoc_insertion_point(serialize_to_array_start:sTest)
   // optional int32 uid = 1;
   if (this->uid() != 0) {
     target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(1, this->uid(), target);
@@ -299,7 +299,7 @@ void TestReq::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->name().data(), this->name().length(),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "TestReq.name");
+      "sTest.name");
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
         2, this->name(), target);
@@ -319,12 +319,12 @@ void TestReq::SerializeWithCachedSizes(
       WriteInt32NoTagToArray(this->nums(i), target);
   }
 
-  // @@protoc_insertion_point(serialize_to_array_end:TestReq)
+  // @@protoc_insertion_point(serialize_to_array_end:sTest)
   return target;
 }
 
-int TestReq::ByteSize() const {
-// @@protoc_insertion_point(message_byte_size_start:TestReq)
+int sTest::ByteSize() const {
+// @@protoc_insertion_point(message_byte_size_start:sTest)
   int total_size = 0;
 
   // optional int32 uid = 1;
@@ -364,25 +364,25 @@ int TestReq::ByteSize() const {
   return total_size;
 }
 
-void TestReq::MergeFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:TestReq)
+void sTest::MergeFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:sTest)
   if (GOOGLE_PREDICT_FALSE(&from == this)) {
     ::google::protobuf::internal::MergeFromFail(__FILE__, __LINE__);
   }
-  const TestReq* source = 
-      ::google::protobuf::internal::DynamicCastToGenerated<const TestReq>(
+  const sTest* source = 
+      ::google::protobuf::internal::DynamicCastToGenerated<const sTest>(
           &from);
   if (source == NULL) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:TestReq)
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:sTest)
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
   } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:TestReq)
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:sTest)
     MergeFrom(*source);
   }
 }
 
-void TestReq::MergeFrom(const TestReq& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:TestReq)
+void sTest::MergeFrom(const sTest& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:sTest)
   if (GOOGLE_PREDICT_FALSE(&from == this)) {
     ::google::protobuf::internal::MergeFromFail(__FILE__, __LINE__);
   }
@@ -396,30 +396,30 @@ void TestReq::MergeFrom(const TestReq& from) {
   }
 }
 
-void TestReq::CopyFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:TestReq)
+void sTest::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:sTest)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-void TestReq::CopyFrom(const TestReq& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:TestReq)
+void sTest::CopyFrom(const sTest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:sTest)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool TestReq::IsInitialized() const {
+bool sTest::IsInitialized() const {
 
   return true;
 }
 
-void TestReq::Swap(TestReq* other) {
+void sTest::Swap(sTest* other) {
   if (other == this) return;
   InternalSwap(other);
 }
-void TestReq::InternalSwap(TestReq* other) {
+void sTest::InternalSwap(sTest* other) {
   std::swap(uid_, other->uid_);
   name_.Swap(&other->name_);
   nums_.UnsafeArenaSwap(&other->nums_);
@@ -427,102 +427,102 @@ void TestReq::InternalSwap(TestReq* other) {
   std::swap(_cached_size_, other->_cached_size_);
 }
 
-::google::protobuf::Metadata TestReq::GetMetadata() const {
+::google::protobuf::Metadata sTest::GetMetadata() const {
   protobuf_AssignDescriptorsOnce();
   ::google::protobuf::Metadata metadata;
-  metadata.descriptor = TestReq_descriptor_;
-  metadata.reflection = TestReq_reflection_;
+  metadata.descriptor = sTest_descriptor_;
+  metadata.reflection = sTest_reflection_;
   return metadata;
 }
 
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
-// TestReq
+// sTest
 
 // optional int32 uid = 1;
-void TestReq::clear_uid() {
+void sTest::clear_uid() {
   uid_ = 0;
 }
- ::google::protobuf::int32 TestReq::uid() const {
-  // @@protoc_insertion_point(field_get:TestReq.uid)
+ ::google::protobuf::int32 sTest::uid() const {
+  // @@protoc_insertion_point(field_get:sTest.uid)
   return uid_;
 }
- void TestReq::set_uid(::google::protobuf::int32 value) {
+ void sTest::set_uid(::google::protobuf::int32 value) {
   
   uid_ = value;
-  // @@protoc_insertion_point(field_set:TestReq.uid)
+  // @@protoc_insertion_point(field_set:sTest.uid)
 }
 
 // optional string name = 2;
-void TestReq::clear_name() {
+void sTest::clear_name() {
   name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
- const ::std::string& TestReq::name() const {
-  // @@protoc_insertion_point(field_get:TestReq.name)
+ const ::std::string& sTest::name() const {
+  // @@protoc_insertion_point(field_get:sTest.name)
   return name_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
- void TestReq::set_name(const ::std::string& value) {
+ void sTest::set_name(const ::std::string& value) {
   
   name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:TestReq.name)
+  // @@protoc_insertion_point(field_set:sTest.name)
 }
- void TestReq::set_name(const char* value) {
+ void sTest::set_name(const char* value) {
   
   name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:TestReq.name)
+  // @@protoc_insertion_point(field_set_char:sTest.name)
 }
- void TestReq::set_name(const char* value, size_t size) {
+ void sTest::set_name(const char* value, size_t size) {
   
   name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:TestReq.name)
+  // @@protoc_insertion_point(field_set_pointer:sTest.name)
 }
- ::std::string* TestReq::mutable_name() {
+ ::std::string* sTest::mutable_name() {
   
-  // @@protoc_insertion_point(field_mutable:TestReq.name)
+  // @@protoc_insertion_point(field_mutable:sTest.name)
   return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
- ::std::string* TestReq::release_name() {
-  // @@protoc_insertion_point(field_release:TestReq.name)
+ ::std::string* sTest::release_name() {
+  // @@protoc_insertion_point(field_release:sTest.name)
   
   return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
- void TestReq::set_allocated_name(::std::string* name) {
+ void sTest::set_allocated_name(::std::string* name) {
   if (name != NULL) {
     
   } else {
     
   }
   name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
-  // @@protoc_insertion_point(field_set_allocated:TestReq.name)
+  // @@protoc_insertion_point(field_set_allocated:sTest.name)
 }
 
 // repeated int32 nums = 3;
-int TestReq::nums_size() const {
+int sTest::nums_size() const {
   return nums_.size();
 }
-void TestReq::clear_nums() {
+void sTest::clear_nums() {
   nums_.Clear();
 }
- ::google::protobuf::int32 TestReq::nums(int index) const {
-  // @@protoc_insertion_point(field_get:TestReq.nums)
+ ::google::protobuf::int32 sTest::nums(int index) const {
+  // @@protoc_insertion_point(field_get:sTest.nums)
   return nums_.Get(index);
 }
- void TestReq::set_nums(int index, ::google::protobuf::int32 value) {
+ void sTest::set_nums(int index, ::google::protobuf::int32 value) {
   nums_.Set(index, value);
-  // @@protoc_insertion_point(field_set:TestReq.nums)
+  // @@protoc_insertion_point(field_set:sTest.nums)
 }
- void TestReq::add_nums(::google::protobuf::int32 value) {
+ void sTest::add_nums(::google::protobuf::int32 value) {
   nums_.Add(value);
-  // @@protoc_insertion_point(field_add:TestReq.nums)
+  // @@protoc_insertion_point(field_add:sTest.nums)
 }
  const ::google::protobuf::RepeatedField< ::google::protobuf::int32 >&
-TestReq::nums() const {
-  // @@protoc_insertion_point(field_list:TestReq.nums)
+sTest::nums() const {
+  // @@protoc_insertion_point(field_list:sTest.nums)
   return nums_;
 }
  ::google::protobuf::RepeatedField< ::google::protobuf::int32 >*
-TestReq::mutable_nums() {
-  // @@protoc_insertion_point(field_mutable_list:TestReq.nums)
+sTest::mutable_nums() {
+  // @@protoc_insertion_point(field_mutable_list:sTest.nums)
   return &nums_;
 }
 
