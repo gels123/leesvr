@@ -26,24 +26,24 @@ include_directories(${PROJECT_SOURCE_DIR}/libs/hiredis)
 #add_subdirectory(libs/libco)
 #include_directories(libs/libco)
 
-# coost库
+# coost库 co
 #set(WITH_BACKTRACE ON)
 set(FPIC ON)
 add_subdirectory(${PROJECT_SOURCE_DIR}/libs/coost)
 include_directories(${PROJECT_SOURCE_DIR}/libs/coost/include)
 
 # 可执行程序main
-#add_executable(main tests/test_dp.cpp)
-#target_link_libraries(main
-#        pthread
+add_executable(main tests/test_coost.cpp)
+target_link_libraries(main
+        pthread
 #        utils
 #        zlog
 #        hiredism
-#        co
-#        )
+        co
+        )
 
 # 可执行程序test
-add_executable(test tests/test20240402.cpp)
-target_link_libraries(test)
+add_executable(test tests/testtmp.cpp)
+target_link_libraries(test co)
 
 
