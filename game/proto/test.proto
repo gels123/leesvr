@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-message TestReq {
+message sTest {
   int32 uid = 1;
   string name = 2;
   repeated int32 nums = 3;
